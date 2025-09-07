@@ -58,7 +58,7 @@ public static class IdDeencryption
         Span<byte> nonce = stackalloc byte[NonceLength];
         RandomNumberGenerator.Fill(nonce);
         // Allocate space for encrypted data
-        Span<byte> encryptedData = stackalloc byte[inputSpan.Length];
+        Span<byte> encryptedData = new byte[inputSpan.Length];
         // Allocate space for tag
         Span<byte> tag = stackalloc byte[TagLength];
         // Create key
