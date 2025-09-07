@@ -3,6 +3,7 @@ using idSaveDataResigner.Infrastructure;
 using idSaveDataResigner.Logger;
 using idSaveDataResigner.Logger.Models;
 using idSaveDataResigner.Logger.Providers;
+using System.Text.RegularExpressions;
 
 #region SETUP
 
@@ -51,8 +52,13 @@ ConsoleHelper.SayHello(breakLine);
 #if DEBUG
 // For debugging purposes, you can manually set the arguments...
 if (args.Length < 1)
-    args = "-m TEST" // ...here
-        .Split(" ");
+{
+    // ...below
+    const string localArgs = "-m TEST";
+    
+    var matches = new Regex("""[\"].+?[\"]|[\'].+?[\']|[\`].+?[\`]|[^ ]+""").Matches(localArgs);
+    args = matches.Select(m => m.Value.Trim('"')).ToArray();
+}
 #endif
 var arguments = ConsoleHelper.ReadArguments(args);
 #if DEBUG
@@ -75,10 +81,6 @@ string[] filesToProcess;
 if (Directory.Exists(inputRootPath)) filesToProcess = Directory.GetFiles(inputRootPath, "*.*", SearchOption.AllDirectories);
 else
     throw new DirectoryNotFoundException($"The provided path '{inputRootPath}' is not a valid directory or does not exist.");
-// Get GAME CODE
-arguments.TryGetValue("-g", out var gameCode);
-if (string.IsNullOrEmpty(gameCode))
-    throw new ArgumentException("Game Code is missing.", nameof(gameCode));
 // Get MODE
 arguments.TryGetValue("-m", out var mode);
 switch (mode)
@@ -92,8 +94,12 @@ switch (mode)
         EncryptAll();
         break;
     case "resign" or "r":
-        // USAGE: -m r -p "FILE_PATH" -g "GAME_CODE" -uI 76561197960265729 -uO 76561197960265730
+        // USAGE: -m r -p "FILE_PATH" -g "GAME_CODE" -uI 76561197960265729 -uO 76561197960271872
         ResignAll();
+        break;
+    case "generate-filemappings" or "gf":
+        // USAGE: -m gf -p "FILE_PATH"
+        GenerateFileMapping();
         break;
     default:
         throw new ArgumentException($"Unknown mode '{mode}'.", nameof(mode));
@@ -115,8 +121,32 @@ return;
 
 #region MODES
 
+void GenerateFileMapping()
+{
+    if (filesToProcess.Length == 0) return;
+    logger.LogInfo($"Generating file mappings for [{filesToProcess.Length}] files...");
+    var outputFilePath = Path.Combine(directories.Output, "filemappings.ini");
+    using var writer = new StreamWriter(outputFilePath);
+    writer.WriteLine("[Mapping]");
+    foreach (var filePath in filesToProcess)
+    {
+        var relativePath = Path.GetRelativePath(inputRootPath, filePath);
+        var parts = relativePath.Replace('\\', '/').Split('/', 2);
+        parts[0] = parts[0].ToUpper();
+        var fileMapping = $"{relativePath}={string.Join('/', parts)}";
+        writer.WriteLine(fileMapping);
+    }
+    writer.WriteLine(); // Add an extra line at the end of the file
+    writer.Flush();
+    writer.Close();
+    logger.LogInfo($"File mappings saved to: {outputFilePath}");
+}
+
 void DecryptAll()
 {
+    arguments.TryGetValue("-g", out var gameCode);
+    if (string.IsNullOrEmpty(gameCode))
+        throw new ArgumentException("Game Code is missing.", nameof(gameCode));
     arguments.TryGetValue("-u", out var userIdInput);
     if (string.IsNullOrEmpty(userIdInput))
         throw new ArgumentException("Input User ID is missing.", nameof(userIdInput));
@@ -154,6 +184,9 @@ void DecryptAll()
 
 void EncryptAll()
 {
+    arguments.TryGetValue("-g", out var gameCode);
+    if (string.IsNullOrEmpty(gameCode))
+        throw new ArgumentException("Game Code is missing.", nameof(gameCode));
     arguments.TryGetValue("-u", out var userIdOutput);
     if (string.IsNullOrEmpty(userIdOutput))
         throw new ArgumentException("Output User ID is missing.", nameof(userIdOutput));
@@ -191,6 +224,9 @@ void EncryptAll()
 
 void ResignAll()
 {
+    arguments.TryGetValue("-g", out var gameCode);
+    if (string.IsNullOrEmpty(gameCode))
+        throw new ArgumentException("Game Code is missing.", nameof(gameCode));
     arguments.TryGetValue("-uI", out var userIdInput);
     if (string.IsNullOrEmpty(userIdInput))
         throw new ArgumentException("Input User ID is missing.", nameof(userIdInput));
