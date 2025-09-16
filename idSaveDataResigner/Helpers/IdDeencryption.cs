@@ -18,7 +18,7 @@ public static class IdDeencryption
     /// <param name="gameCode">A string representing the game code associated with the file. This value is used as part of the key derivation process.</param>
     /// <param name="userId">The user identifier associated with the file. This value is used as part of the key derivation process.</param>
     /// <exception cref="ArgumentException">Thrown if <paramref name="outputSpan"/> does not have the correct length.</exception>
-    public static void DecryptFile(ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan, string fileName, string gameCode, string userId)
+    public static void DecryptData(ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan, string fileName, string gameCode, string userId)
     {
         // Check if outputSpan is the correct size
         if (outputSpan.Length != inputSpan.Length - NonceAndTagTotalLength)
@@ -49,7 +49,7 @@ public static class IdDeencryption
     /// <param name="gameCode">A unique code representing the game. Used as part of the encryption key derivation.</param>
     /// <param name="userId">The identifier of the user associated with the input data. Used as part of the encryption key derivation.</param>
     /// <exception cref="ArgumentException">Thrown if <paramref name="outputSpan"/> does not have the required length to store the encrypted data.</exception>
-    public static void EncryptFile(ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan, string fileName, string gameCode, string userId)
+    public static void EncryptData(ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan, string fileName, string gameCode, string userId)
     {
         // Check if outputSpan is the correct size
         if (outputSpan.Length != inputSpan.Length + NonceAndTagTotalLength)

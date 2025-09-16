@@ -55,7 +55,7 @@ if (args.Length < 1)
 {
     // ...below
     const string localArgs = "-m TEST";
-    
+
     var matches = new Regex("""[\"].+?[\"]|[\'].+?[\']|[\`].+?[\`]|[^ ]+""").Matches(localArgs);
     args = matches.Select(m => m.Value.Trim('"')).ToArray();
 }
@@ -147,16 +147,16 @@ void DecryptAll()
     arguments.TryGetValue("-g", out var gameCode);
     if (string.IsNullOrEmpty(gameCode))
         throw new ArgumentException("Game Code is missing.", nameof(gameCode));
-    arguments.TryGetValue("-u", out var userIdInput);
-    if (string.IsNullOrEmpty(userIdInput))
-        throw new ArgumentException("Input User ID is missing.", nameof(userIdInput));
+    arguments.TryGetValue("-u", out var userId);
+    if (string.IsNullOrEmpty(userId))
+        throw new ArgumentException("Input User ID is missing.", nameof(userId));
     if (filesToProcess.Length == 0) return;
     logger.LogInfo($"Decrypting [{filesToProcess.Length}] files...");
     // DECRYPT
     // Create a new folder in OUTPUT directory
     var outputDir = GetNewOutputDirectory(directories.Output, "decrypted");
     // Crate the folder structure in the newly created output directory
-    CreateOutputFolderStructure(inputRootPath, outputDir, filesToProcess);
+    CreateOutputFolderStructure(inputRootPath, outputDir, filesToProcess, userId);
     // Setup parallel options
     CancellationTokenSource cts = new();
     var po = GetParallelOptions(cts);
@@ -170,14 +170,16 @@ void DecryptAll()
         logger.LogInfo($"Decrypting [{fileName}] file...", group);
         try
         {
-            IdDeencryption.DecryptFile(inputDataSpan, outputDataSpan, fileName, gameCode, userIdInput);
+            IdDeencryption.DecryptData(inputDataSpan, outputDataSpan, fileName, gameCode, userId);
         }
         catch (Exception e)
         {
             logger.LogError($"Failed to decrypt the [{fileName}] file: {e}", group);
             return; // Skip to the next file
         }
-        File.WriteAllBytes(filesToProcess[ctr].Replace(inputRootPath, outputDir), outputDataSpan);
+        // Save the decrypted data to the output directory, preserving the folder structure
+        var outputFilePath = filesToProcess[ctr].Replace(inputRootPath, Path.Combine(outputDir, userId));
+        File.WriteAllBytes(outputFilePath, outputDataSpan);
         logger.LogInfo($"Decrypted [{fileName}] file.", group);
     });
 }
@@ -187,16 +189,16 @@ void EncryptAll()
     arguments.TryGetValue("-g", out var gameCode);
     if (string.IsNullOrEmpty(gameCode))
         throw new ArgumentException("Game Code is missing.", nameof(gameCode));
-    arguments.TryGetValue("-u", out var userIdOutput);
-    if (string.IsNullOrEmpty(userIdOutput))
-        throw new ArgumentException("Output User ID is missing.", nameof(userIdOutput));
+    arguments.TryGetValue("-u", out var userId);
+    if (string.IsNullOrEmpty(userId))
+        throw new ArgumentException("Output User ID is missing.", nameof(userId));
     if (filesToProcess.Length == 0) return;
     logger.LogInfo($"Encrypting [{filesToProcess.Length}] files...");
     // ENCRYPT
     // Create a new folder in OUTPUT directory
     var outputDir = GetNewOutputDirectory(directories.Output, "encrypted");
     // Crate the folder structure in the newly created output directory
-    CreateOutputFolderStructure(inputRootPath, outputDir, filesToProcess);
+    CreateOutputFolderStructure(inputRootPath, outputDir, filesToProcess, userId);
     // Setup parallel options
     CancellationTokenSource cts = new();
     var po = GetParallelOptions(cts);
@@ -210,14 +212,16 @@ void EncryptAll()
         logger.LogInfo($"Encrypting [{fileName}] file...", group);
         try
         {
-            IdDeencryption.EncryptFile(inputDataSpan, outputDataSpan, fileName, gameCode, userIdOutput);
+            IdDeencryption.EncryptData(inputDataSpan, outputDataSpan, fileName, gameCode, userId);
         }
         catch (Exception e)
         {
             logger.LogError($"Failed to encrypt the [{fileName}] file: {e}", group);
             return; // Skip to the next file
         }
-        File.WriteAllBytes(filesToProcess[ctr].Replace(inputRootPath, outputDir), outputDataSpan);
+        // Save the encrypted data to the output directory, preserving the folder structure
+        var outputFilePath = filesToProcess[ctr].Replace(inputRootPath, Path.Combine(outputDir, userId));
+        File.WriteAllBytes(outputFilePath, outputDataSpan);
         logger.LogInfo($"Encrypted [{fileName}] file.", group);
     });
 }
@@ -239,7 +243,7 @@ void ResignAll()
     // Create a new folder in OUTPUT directory
     var outputDir = GetNewOutputDirectory(directories.Output, "resigned");
     // Crate the folder structure in the newly created output directory
-    CreateOutputFolderStructure(inputRootPath, outputDir, filesToProcess);
+    CreateOutputFolderStructure(inputRootPath, outputDir, filesToProcess, userIdOutput);
     // Setup parallel options
     CancellationTokenSource cts = new();
     var po = GetParallelOptions(cts);
@@ -253,7 +257,7 @@ void ResignAll()
         logger.LogInfo($"Decrypting [{fileName}] file...", group);
         try
         {
-            IdDeencryption.DecryptFile(encryptedDataSpan, decryptedDataSpan, fileName, gameCode, userIdInput);
+            IdDeencryption.DecryptData(encryptedDataSpan, decryptedDataSpan, fileName, gameCode, userIdInput);
         }
         catch (Exception e)
         {
@@ -263,14 +267,16 @@ void ResignAll()
         logger.LogInfo($"Encrypting [{fileName}] file...", group);
         try
         {
-            IdDeencryption.EncryptFile(decryptedDataSpan, encryptedDataSpan, fileName, gameCode, userIdOutput);
+            IdDeencryption.EncryptData(decryptedDataSpan, encryptedDataSpan, fileName, gameCode, userIdOutput);
         }
         catch (Exception e)
         {
             logger.LogError($"Failed to encrypt the [{fileName}] file: {e}", group);
             return; // Skip to the next file
         }
-        File.WriteAllBytes(filesToProcess[ctr].Replace(inputRootPath, outputDir), encryptedDataSpan);
+        // Save the resigned data to the output directory, preserving the folder structure
+        var outputFilePath = filesToProcess[ctr].Replace(inputRootPath, Path.Combine(outputDir, userIdOutput));
+        File.WriteAllBytes(outputFilePath, encryptedDataSpan);
         logger.LogInfo($"Resigned [{fileName}] file.", group);
     });
 }
@@ -282,13 +288,13 @@ void ResignAll()
 
 static string GetNewOutputDirectory(string rootPath, string action) => Path.Combine(rootPath, $"{DateTime.Now:yyyy-MM-dd_HHmmssfff}_{action}");
 
-static void CreateOutputFolderStructure(string inputRootPath, string outputDirectory, string[] filesToProcess)
+static void CreateOutputFolderStructure(string inputRootPath, string outputDirectory, string[] filesToProcess, string userId)
 {
     var uniqueParentDirectories = filesToProcess
         .Select(Path.GetDirectoryName)
         .Where(dir => dir != null)
         .Distinct()
-        .Select(dir => dir?.Replace(inputRootPath, outputDirectory))
+        .Select(dir => dir?.Replace(inputRootPath, Path.Combine(outputDirectory, userId)))
         .ToArray();
     foreach (var dir in uniqueParentDirectories)
     {
