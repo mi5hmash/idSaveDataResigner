@@ -9,17 +9,22 @@
 # 🆔 idSaveDataResigner - What is it :interrobang:
 <img src="https://github.com/mi5hmash/idSaveDataResigner/blob/main/.resources/images/idSaveDataResignerLogo.png" alt="icon" width="256"/>
 
-This command-line utility can **encrypt and decrypt SaveData files** from various games running on idTech Engine versions 7 and 8. It can also **resign SaveData files** with your own UserID so you can **load them on your User Account**.
+This command-line utility can **encrypt and decrypt SaveData files** from various games running on idTech Engine versions 7 and 8. It can also **resign SaveData files** with your own User ID so you can **load them on your User Account**.
 
 ## Supported titles
-| Game Title                         | Steam App ID  | Game Code |
-|------------------------------------|---------------|-----------|
-| DOOM Eternal                       | 782330        | MANCUBUS  |
-| Indiana Jones and the Great Circle | 2677660       | SUKHOTHAI |
-| DOOM The Dark Ages                 | 3017860       | MANCUBUS  |
+| Game Title                                 | Steam App ID  | Game Code     |
+|--------------------------------------------|---------------|---------------|
+| DOOM Eternal                               | 782330        | MANCUBUS      |
+| DOOM The Dark Ages                         | 3017860       | MANCUBUS      |
+| Indiana Jones and the Great Circle [STEAM] | 2677660       | SUKHOTHAI     |
+| Indiana Jones and the Great Circle [GOG]   | -             | PAINELEMENTAL |
 
 ## Supported platforms
 Out of the box, it only supports SaveData files from the Steam PC version. Why? Simply because that’s the platform I chose to purchase these games on.
+
+## 🔄 Note about the conversion between the Steam and GOG platforms
+In the case of Indiana Jones and the Great Circle game, the GOG platform uses a different Game Code than the Steam version, along with a fixed User ID. 
+To convert SaveData files between these two platforms, you must first decrypt the files using the appropriate Game Code and User ID for the source platform, and then encrypt them using the Game Code and User ID of the target platform.
 
 # 🤯 Why was it created :interrobang:
 I wanted to share a SaveData file with a friend, but it isn't possible by default.

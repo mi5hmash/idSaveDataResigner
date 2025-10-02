@@ -17,7 +17,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Mi5hmasH.GameLaunchers" Version="0.0.1" />
 		<PackageReference Include="Mi5hmasH.Logger" Version="3.0.0" />
 	</ItemGroup>
 
