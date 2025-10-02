@@ -5,43 +5,42 @@ namespace idSaveDataResignerCore.Infrastructure;
 /// <summary>
 /// Provides utility methods and properties for managing application directory paths, including the root and output directories.
 /// </summary>
-public static partial class Directories
+public static class Directories
 {
-    public static string RootPath => AppDomain.CurrentDomain.BaseDirectory;
-
-    public static string Output { get; } = Path.Combine(RootPath, "_OUTPUT");
-    public static void CreateOutput() => Directory.CreateDirectory(Output);
-    
-    /// <summary>
-    /// Creates all required output resources for the application.
-    /// </summary>
-    public static void CreateAll()
-    {
-        CreateOutput();
-    }
+    public static readonly string RootPath = AppDomain.CurrentDomain.BaseDirectory;
+    public static readonly string Output = Path.Combine(RootPath, "_OUTPUT");
+    public static readonly string Profiles = Path.Combine(RootPath, "_profiles");
 
     /// <summary>
     /// Generates a new output directory path using the current date and time, combined with the specified action name.
     /// </summary>
     /// <param name="action">The name of the action to include in the output directory path.</param>
     /// <returns>A string representing the full path of the new output directory, formatted with the current date, time, and the specified action.</returns>
-    public static string GetNewOutputDirectory(string action) 
+    public static string GetNewOutputDirectory(string action)
         => Path.Combine(Output, $"{DateTime.Now:yyyy-MM-dd_HHmmssfff}_{action}");
 
     /// <summary>
-    /// Creates the output folder structure in the specified directory for the given user, mirroring the parent directories of the input files to be processed.
+    /// Combines the specified output directory path with a user identifier to create a user-specific subdirectory path.
     /// </summary>
-    /// <param name="inputRootPath">The root path of the input directory tree. Used to determine the relative structure of folders to replicate in the output directory.</param>
-    /// <param name="outputDirectory">The base directory where the output folder structure will be created.</param>
-    /// <param name="filesToProcess">An array of file paths representing the files to process. The parent directories of these files are used to construct the output folder structure.</param>
-    /// <param name="userId">The identifier for the user. The output folder structure will be created under a subdirectory named after this user.</param>
-    public static void CreateOutputFolderStructure(string inputRootPath, string outputDirectory, string[] filesToProcess, string userId)
+    /// <param name="outputDirectory">The base directory path where user-specific subdirectories will be created.</param>
+    /// <param name="userId">The user identifier to append to the output directory path.</param>
+    /// <returns>A string representing the combined path of the output directory and user identifier.</returns>
+    public static string AddUserId(this string outputDirectory, string userId)
+        => Path.Combine(outputDirectory, userId);
+
+    /// <summary>
+    /// Creates the output folder structure by replicating the parent directories of the specified input files under the given output directory.
+    /// </summary>
+    /// <param name="filesToProcess">An array of file paths representing the files to process. Each file's parent directory will be recreated under the output directory.</param>
+    /// <param name="inputRootPath">The root path of the input directory structure. This path is replaced with the output directory when creating the new folder structure.</param>
+    /// <param name="outputDirectory">The path to the root output directory where the folder structure will be created.</param>
+    public static void CreateOutputFolderStructure(string[] filesToProcess, string inputRootPath, string outputDirectory)
     {
         var uniqueParentDirectories = filesToProcess
             .Select(Path.GetDirectoryName)
             .Where(dir => dir != null)
             .Distinct()
-            .Select(dir => dir?.Replace(inputRootPath, Path.Combine(outputDirectory, userId)))
+            .Select(dir => dir?.Replace(inputRootPath, outputDirectory))
             .ToArray();
         foreach (var dir in uniqueParentDirectories)
         {
@@ -62,23 +61,21 @@ public static partial class Directories
         string? openCmd = null;
         string? args = null;
 
-        if (Directory.Exists(path))
+        Directory.CreateDirectory(path);
+        if (OperatingSystem.IsWindows())
         {
-            if (OperatingSystem.IsWindows())
-            {
-                openCmd = "explorer.exe";
-                args = $"\"{path}\"";
-            }
-            else if (OperatingSystem.IsMacOS())
-            {
-                openCmd = "open";
-                args = $"\"{path}\"";
-            }
-            else if (OperatingSystem.IsLinux() || OperatingSystem.IsFreeBSD())
-            {
-                openCmd = "xdg-open";
-                args = $"\"{path}\"";
-            }
+            openCmd = "explorer.exe";
+            args = $"\"{path}\"";
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            openCmd = "open";
+            args = $"\"{path}\"";
+        }
+        else if (OperatingSystem.IsLinux() || OperatingSystem.IsFreeBSD())
+        {
+            openCmd = "xdg-open";
+            args = $"\"{path}\"";
         }
 
         if (openCmd != null && args != null)

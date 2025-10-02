@@ -13,11 +13,10 @@
 		<Company>$(Authors)</Company>
 		<Copyright>$(Authors) © $([System.DateTime]::UtcNow.Year)</Copyright>
 		<PackageProjectUrl>https://github.com/mi5hmash/idSaveDataResigner</PackageProjectUrl>
-		<Description>Resigns, Decrypts &amp; Encrypts SaveData files from various games running on idTech Engine versions 7 and 8.</Description>
+		<Description>Re-signs, Decrypts &amp; Encrypts SaveData files from various games running on idTech Engine versions 7 and 8.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Mi5hmasH.GameLaunchers" Version="0.0.1" />
 		<PackageReference Include="Mi5hmasH.Logger" Version="3.0.0" />
 	</ItemGroup>
 

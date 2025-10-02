@@ -43,7 +43,7 @@ public static class IdDeencryption
     /// <summary>
     /// Encrypts the input data and writes the encrypted output to the specified span.
     /// </summary>
-    /// /// <param name="outputSpan">The span where the encrypted data will be written. Must be large enough to hold the nonce, encrypted data, and authentication tag.</param>
+    /// <param name="outputSpan">The span where the encrypted data will be written. Must be large enough to hold the nonce, encrypted data, and authentication tag.</param>
     /// <param name="inputSpan">The span containing the data to be encrypted.</param>
     /// <param name="fileName">The name of the file associated with the encryption process. Used as part of the encryption key derivation.</param>
     /// <param name="gameCode">A unique code representing the game. Used as part of the encryption key derivation.</param>

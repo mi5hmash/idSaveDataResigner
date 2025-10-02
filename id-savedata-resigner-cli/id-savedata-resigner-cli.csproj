@@ -14,7 +14,7 @@
 		<Company>$(Authors)</Company>
 		<Copyright>$(Authors) © $([System.DateTime]::UtcNow.Year)</Copyright>
 		<PackageProjectUrl>https://github.com/mi5hmash/idSaveDataResigner</PackageProjectUrl>
-		<Description>Resigns, Decrypts &amp; Encrypts SaveData files from various games running on idTech Engine versions 7 and 8.</Description>
+		<Description>Re-signs, Decrypts &amp; Encrypts SaveData files from various games running on idTech Engine versions 7 and 8.</Description>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<NoWarn>IL2104</NoWarn>
 	</PropertyGroup>
