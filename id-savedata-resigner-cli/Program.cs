@@ -121,23 +121,23 @@ static void PrintHelp()
                        Usage: {exeName} -m <mode> [options]
 
                        Modes:
-                         -m d           Decrypt SaveData files
-                         -m e           Encrypt SaveData files
-                         -m r           Resign SaveData files
+                         -m d  Decrypt SaveData files
+                         -m e  Encrypt SaveData files
+                         -m r  Resign SaveData files
 
                        Options:
-                         -g <game_code> Game Code (e.g., "{gameCode}")
-                         -p <path>      Path to folder containing SaveData files
-                         -u <user_id>   User ID (used in decrypt/encrypt modes)
-                         -uI <old_id>   Original User ID (used in resign mode)
-                         -uO <new_id>   New User ID (used in resign mode)
-                         -v             Verbose output
-                         -h             Show this help message
+                         -g <game_code>  Game Code (e.g., "{gameCode}")
+                         -p <path>       Path to folder containing SaveData files
+                         -u <user_id>    User ID (used in decrypt/encrypt modes)
+                         -uI <old_id>    Original User ID (used in resign mode)
+                         -uO <new_id>    New User ID (used in resign mode)
+                         -v              Verbose output
+                         -h              Show this help message
 
                        Examples:
-                         Decrypt: {exeName} -m d -g "{gameCode}" -p "{inputPath}" -u 76561197960265729
-                         Encrypt: {exeName} -m e -g "{gameCode}" -p "{inputPath}" -u 76561197960265729
-                         Resign : {exeName} -m r -g "{gameCode}" -p "{inputPath}" -uI 76561197960265729 -uO 76561197960265730
+                         Decrypt:  {exeName} -m d -g "{gameCode}" -p "{inputPath}" -u 76561197960265729
+                         Encrypt:  {exeName} -m e -g "{gameCode}" -p "{inputPath}" -u 76561197960265729
+                         Resign:   {exeName} -m r -g "{gameCode}" -p "{inputPath}" -uI 76561197960265729 -uO 76561197960265730
                        """;
     Console.WriteLine(helpMessage);
 }
