@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>id_savedata_resigner_cli</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
+		<FileVersion>$(AssemblyVersion)</FileVersion>
+		<Version>$(AssemblyVersion)</Version>
+		<Authors>Mi5hmasH</Authors>
+		<Company>$(Authors)</Company>
+		<Copyright>$(Authors) © $([System.DateTime]::UtcNow.Year)</Copyright>
+		<PackageProjectUrl>https://github.com/mi5hmash/idSaveDataResigner</PackageProjectUrl>
+		<Description>Resigns, Decrypts &amp; Encrypts SaveData files from various games running on idTech Engine versions 7 and 8.</Description>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<NoWarn>IL2104</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Mi5hmasH.ConsoleHelper" Version="0.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\idSaveDataResignerCore\idSaveDataResignerCore.csproj" />
+	</ItemGroup>
+
+</Project>

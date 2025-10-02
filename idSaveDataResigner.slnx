@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="id-savedata-resigner-cli/id-savedata-resigner-cli.csproj" />
+  <Project Path="idSaveDataResignerCore/idSaveDataResignerCore.csproj" />
+</Solution>
