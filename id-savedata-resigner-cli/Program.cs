@@ -137,7 +137,7 @@ static void PrintHelp()
                        Examples:
                          Decrypt: {exeName} -m d -g "{gameCode}" -p "{inputPath}" -u 76561197960265729
                          Encrypt: {exeName} -m e -g "{gameCode}" -p "{inputPath}" -u 76561197960265729
-                         Resign : {exeName} -m r -g "{gameCode}" -p "{inputPath}" -uI 76561197960265729 -uO 76561197960265730
+                         Resign:  {exeName} -m r -g "{gameCode}" -p "{inputPath}" -uI 76561197960265729 -uO 76561197960265730
                        """;
     Console.WriteLine(helpMessage);
 }
