@@ -1,26 +1,21 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blueviolet.svg)](https://opensource.org/license/mit)
 [![Release Version](https://img.shields.io/github/v/tag/mi5hmash/idSaveDataResigner?label=Version)](https://github.com/mi5hmash/idSaveDataResigner/releases/latest)
-[![Visual Studio 2022](https://custom-icon-badges.demolab.com/badge/Visual%20Studio%202022-5C2D91.svg?&logo=visual-studio&logoColor=white)](https://visualstudio.microsoft.com/)
-[![.NET9](https://img.shields.io/badge/.NET%209-512BD4?logo=dotnet&logoColor=fff)](#)
+[![Visual Studio 2026](https://custom-icon-badges.demolab.com/badge/Visual%20Studio%202026-F0ECF8.svg?&logo=visual-studio-26)](https://visualstudio.microsoft.com/)
+[![.NET10](https://img.shields.io/badge/.NET%2010-512BD4?logo=dotnet&logoColor=fff)](#)
 
 > [!IMPORTANT]
 > **This software is free and open source. If someone asks you to pay for it, it's likely a scam.**
 
 # 🆔 idSaveDataResigner - What is it :interrobang:
-<img src="https://github.com/mi5hmash/idSaveDataResigner/blob/main/.resources/images/idSaveDataResignerLogo.png" alt="icon" width="256"/>
-
-This command-line utility can **encrypt and decrypt SaveData files** from various games running on idTech Engine versions 7 and 8. It can also **resign SaveData files** with your own User ID so you can **load them on your User Account**.
+This application can **encrypt and decrypt SaveData files** from various games running on idTech Engine versions 7 and 8. It can also **re-sign SaveData files** with your own User ID so you can **use anyone’s SaveData on your User Account**.
 
 ## Supported titles
-| Game Title                                 | Steam App ID  | Game Code     |
-|--------------------------------------------|---------------|---------------|
-| DOOM Eternal                               | 782330        | MANCUBUS      |
-| DOOM The Dark Ages                         | 3017860       | MANCUBUS      |
-| Indiana Jones and the Great Circle [STEAM] | 2677660       | SUKHOTHAI     |
-| Indiana Jones and the Great Circle [GOG]   | -             | PAINELEMENTAL |
-
-## Supported platforms
-Out of the box, it only supports SaveData files from the Steam PC version. Why? Simply because that’s the platform I chose to purchase these games on.
+|Game Title|Platform|App ID|Game Code|
+|---|---|---|---|
+|DOOM Eternal|Steam|782330|MANCUBUS|
+|DOOM The Dark Ages|Steam|3017860|MANCUBUS|
+|Indiana Jones and the Great Circle|Steam|2677660|SUKHOTHAI|
+|Indiana Jones and the Great Circle|GOG|-|PAINELEMENTAL|
 
 ## 🔄 Note about the conversion between the Steam and GOG platforms
 In the case of Indiana Jones and the Great Circle game, the GOG platform uses a different Game Code than the Steam version, along with a fixed User ID. 
@@ -43,53 +38,111 @@ The short answer is: **No.**
 You’ve been warned. Now that you fully understand the possible consequences, you may proceed to the next chapter.
 
 # :scroll: How to use this tool
-This utility processes files based on the selected mode (`-m`). Each mode requires a game code (`-g`) and an input file path (`-p`). Mode-specific required parameters must be provided accordingly. Additional optional parameters may also be included.
+## [GUI] - 🪟 Windows 
+> [!IMPORTANT]
+> If you’re working on Linux or macOS, skip this chapter and move on to the next one.
+
+On Windows, you can use either the CLI or the GUI version, but in this chapter I’ll describe the latter.
+
+<img src="https://github.com/mi5hmash/idSaveDataResigner/blob/main/.resources/images/MainWindow-v2.png" alt="MainWindow-v2"/>
+
+#### 1. Selecting the Game Profile
+Game Profile is a configuration file that stores the settings for a specific game.
+In plain terms, it tells my application how it should behave for that particular game.
+I include a package with ready‑to‑use Game Profile files (**profiles.zip**) in the release section.
+The ***"_profiles"*** folder inside that package, containing the Game Profile files, should be placed in the same directory as the program’s executable.
+Button **(2)** opens the local ***"_profiles"*** folder.
+
+#### 2. Setting the Input Directory
+You can set the input folder in whichever way feels most convenient:
+- **Drag & drop:** Drop SaveData file - or the folder containing it - onto the TextBox **(3)**.
+- **Pick a folder manually:** Click the button **(4)** to open a folder‑picker window and browse to the directory where SaveData file is.
+- **Type it in:** If you already know the path, simply enter it directly into the TextBox **(3)**.
+
+#### 3. Entering the User ID
+In the case of Steam, your User ID is 64-bit SteamID.  
+One way to find it is by using the SteamDB calculator at [steamdb.info](https://steamdb.info/calculator/).
+
+#### 4. Re-signing SaveData files
+If you want to re‑sign your SaveData file/s so it works on another Steam account, select the Game Profile **(1)** corresponding to the game from which the save file comes. Once you have it selected, type the User ID of the account that originally created that SaveData file/s into the TextBox **(5)**. Then enter the User ID of the account that should be allowed to use that SaveData file/s into the TextBox **(7)**. Finally, press the **"Re-sign All"** button **(11)**.
 
 > [!NOTE]
-> All processed files are saved in a newly created folder within the **`_OUTPUT`** directory, located in the program's root directory.
+> The re‑signed files will be placed in a newly created folder within the ***"idSaveDataResigner/_OUTPUT/"*** folder.
+
+#### 5. Accessing modified files
+Modified files are being placed in a newly created folder within the ***"idSaveDataResigner/_OUTPUT/"*** folder. You may open this directory in a new File Explorer window by pressing the button **(12)**.
 
 > [!NOTE]
-> Log files are saved in CSV format in the program's root directory. Only the two most recent log files are retained.
+> After you locate the modified files, you can copy them into your save‑game folder.
 
-> [!TIP]
-You can use the SteamDB calculator at [steamdb.info](https://steamdb.info/calculator/) to find your 64-bit SteamID.
+### ADVANCED OPERATIONS
 
-## Resigning (`-m r`)
-Resigns all files in the specified directory from one user ID to another.
-### Usage:
-```sh
-.\idSaveDataResigner -m r -p "FOLDER_PATH" -g "GAME_CODE" -uI 76561197960265729 -uO 76561197960265730 -v
+#### Enabling SuperUser Mode
+
+> [!WARNING]
+> This mode is for advanced users only.
+
+If you really need it, you can enable SuperUser mode by triple-clicking the version number label **(13)**.
+
+#### Decrypting SaveData files
+
+> [!IMPORTANT]  
+> This button is visible only when the SuperUser Mode is Enabled. 
+
+If you want to decrypt SaveData file\s to read its content, select the Game Profile **(1)** corresponding to the game from which the SaveData file comes, type the User ID of the account that originally created that SaveData file/s into the TextBox **(5)**, and press the **"Decrypt All"** button **(8)**.
+
+#### Encrypting SaveData files
+
+> [!IMPORTANT]  
+> This button is visible only when the SuperUser Mode is Enabled. 
+
+If you want to encrypt the decrypted SaveData file\s, select the Game Profile **(5)** corresponding to the game from which the SaveData file comes, enter the User ID of the account that should be allowed to use that SaveData file/s into the TextBox **(7)**, and press the **"Encrypt All"** button **(9)**.
+
+### OTHER BUTTONS
+Button **(10)** cancels the currently running operation.
+Button **(6)** swaps the values in the **"User ID (INPUT)"** and **"User ID (OUTPUT)"** TextBoxes.
+
+## [CLI] - 🪟 Windows | 🐧 Linux | 🍎 macOS
+
+```plaintext
+Usage: .\id-savedata-resigner-cli.exe -m <mode> [options]
+
+Modes:
+  -m d  Decrypt SaveData files
+  -m e  Encrypt SaveData files
+  -m r  Re-sign SaveData files
+
+Options:
+  -g <game_code>  Game Code (e.g., "MANCUBUS")
+  -p <path>       Path to folder containing SaveData files
+  -u <user_id>    User ID (used in decrypt/encrypt modes)
+  -uI <old_id>    Original User ID (used in re-sign mode)
+  -uO <new_id>    New User ID (used in re-sign mode)
+  -v              Verbose output
+  -h              Show this help message
 ```
-### Parameters:
-- `-p` (Required) – Path to the directory containing files to resign.
-- `-g` (Required) – Game code identifier.
-- `-uI` (Required) – Original User ID.
-- `-uO` (Required) – New User ID.
-- `-v` (Optional) – Enables verbose console window output.
 
-## Decryption (`-m d`)
-Decrypts all SaveData files in the specified directory.
-### Usage:
-```sh
-.\idSaveDataResigner -m d -p "FOLDER_PATH" -g "GAME_CODE" -u 76561197960265729 -v
+### Examples
+#### Decrypt
+```bash
+.\id-savedata-resigner-cli.exe -m d -g "MANCUBUS" -p ".\InputDirectory" -u 76561197960265729
 ```
-### Parameters:
-- `-p` (Required) – Path to the directory containing files to decrypt.
-- `-g` (Required) – Game Code identifier.
-- `-u` (Required) – User ID related to decryption.
-- `-v` (Optional) – Enables verbose console window output.
+#### Encrypt
+```bash
+.\id-savedata-resigner-cli.exe -m e -g "MANCUBUS" -p ".\InputDirectory" -u 76561197960265730
+```
+#### Re-sign
+```bash
+.\id-savedata-resigner-cli.exe -m r -g "MANCUBUS" -p ".\InputDirectory" -uI 76561197960265729 -uO 76561197960265730
+```
 
-## Encryption (`-m e`)
-Encrypts all files in the specified directory.
-### Usage:
-```sh
-.\idSaveDataResigner -m e -p "FOLDER_PATH" -g "GAME_CODE" -u 76561197960265729 -v
-```
-### Parameters:
-- `-p` (Required) – Path to the directory containing files to encrypt.
-- `-g` (Required) – Game Code identifier.
-- `-u` (Required) – User ID related to encryption.
-- `-v` (Optional) – Enables verbose console window output.
+> [!NOTE]
+> Modified files are being placed in a newly created folder within the ***"idSaveDataResigner/_OUTPUT/"*** folder.
 
 # :fire: Issues
-All the issues I encountered during testing were fixed on the spot. If you happen to find any other problems (though I hope you won’t), feel free to report them [there](https://github.com/mi5hmash/idSaveDataResigner/issues).
+All the problems I've encountered during my tests have been fixed on the go. If you find any other issues (which I hope you won't) feel free to report them [there](https://github.com/mi5hmash/idSaveDataResigner/issues).
+
+> [!TIP]
+> This application creates a log file that may be helpful in troubleshooting.  
+It can be found in the same directory as the executable file.  
+Application stores up to two log files from the most recent sessions.

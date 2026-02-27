@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="GameProfileEditor/GameProfileEditor.csproj" Id="74858940-5db8-4e3c-98e0-9573052b995a" />
+  <Project Path="id-savedata-resigner-cli/id-savedata-resigner-cli.csproj" />
+  <Project Path="idSaveDataResignerCore/idSaveDataResignerCore.csproj" />
+  <Project Path="idSaveDataResignerWpf/idSaveDataResignerWpf.csproj" Id="ce5efab5-7d46-45bf-99b1-2771e24bff07" />
+  <Project Path="QualityControl.xUnit/QualityControl.xUnit.csproj" Id="0b07ca8e-8f54-4d80-abd0-c3d98a3e29fa" />
+</Solution>
