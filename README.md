@@ -96,11 +96,11 @@ If you want to decrypt SaveData file\s to read its content, select the Game Prof
 > [!IMPORTANT]  
 > This button is visible only when the SuperUser Mode is Enabled. 
 
-If you want to encrypt the decrypted SaveData file\s, select the Game Profile **(5)** corresponding to the game from which the SaveData file comes, enter the User ID of the account that should be allowed to use that SaveData file/s into the TextBox **(7)**, and press the **"Encrypt All"** button **(9)**.
+If you want to encrypt the decrypted SaveData file\s, select the Game Profile **(1)** corresponding to the game from which the SaveData file comes, enter the User ID of the account that should be allowed to use that SaveData file/s into the TextBox **(7)**, and press the **"Encrypt All"** button **(9)**.
 
 ### OTHER BUTTONS
-Button **(10)** cancels the currently running operation.
 Button **(6)** swaps the values in the **"User ID (INPUT)"** and **"User ID (OUTPUT)"** TextBoxes.
+Button **(10)** cancels the currently running operation.
 
 ## [CLI] - 🪟 Windows | 🐧 Linux | 🍎 macOS
 
