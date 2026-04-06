@@ -268,6 +268,12 @@ public partial class MainWindowViewModel : ObservableValidator
     }
     #endregion
 
+    #region WINDOW_RESIZE_UNLOCK
+    [RelayCommand]
+    private static void UnlockWindowResize(Window window)
+        => window.ResizeMode = ResizeMode.CanResizeWithGrip;
+    #endregion
+
     private CancellationTokenSource _cts = new();
     private readonly Core _core;
     [ObservableProperty] private SuperUserManager _superUserManager;

@@ -13,13 +13,19 @@ This application can **encrypt and decrypt SaveData files** from various games r
 |Game Title|Platform|App ID|Game Code|
 |---|---|---|---|
 |DOOM Eternal|Steam|782330|MANCUBUS|
+|DOOM Eternal|GOG|-|ARACHNOTRON|
 |DOOM The Dark Ages|Steam|3017860|MANCUBUS|
 |Indiana Jones and the Great Circle|Steam|2677660|SUKHOTHAI|
 |Indiana Jones and the Great Circle|GOG|-|PAINELEMENTAL|
 
-## 🔄 Note about the conversion between the Steam and GOG platforms
-In the case of Indiana Jones and the Great Circle game, the GOG platform uses a different Game Code than the Steam version, along with a fixed User ID. 
+## 🔄 Notes about the conversion between the Steam and GOG platforms
 To convert SaveData files between these two platforms, you must first decrypt the files using the appropriate Game Code and User ID for the source platform, and then encrypt them using the Game Code and User ID of the target platform.
+
+### Indiana Jones and the Great Circle [GOG]
+The GOG platform uses a different Game Code than the Steam version, along with a fixed User ID.
+
+### DOOM Eternal [GOG]
+The GOG platform uses a different Game Code than the Steam version, along with a fixed User ID - which is `GogUser`.
 
 # 🤯 Why was it created :interrobang:
 I wanted to share a SaveData file with a friend, but it isn't possible by default.
@@ -118,7 +124,7 @@ Options:
   -u <user_id>    User ID (used in decrypt/encrypt modes)
   -uI <old_id>    Original User ID (used in re-sign mode)
   -uO <new_id>    New User ID (used in re-sign mode)
-  -v              Verbose output
+  -q              Don't wait for user input to exit after operation completes (auto-close)
   -h              Show this help message
 ```
 
@@ -146,3 +152,7 @@ All the problems I've encountered during my tests have been fixed on the go. If 
 > This application creates a log file that may be helpful in troubleshooting.  
 It can be found in the same directory as the executable file.  
 Application stores up to two log files from the most recent sessions.
+
+## [ISSUE] Not all controls are visible in the WPF application on Windows
+You probably have your Windows system font size set higher than the default.
+Set the font size back to the default value, or press **`CTRL + SHIFT + J`** to unlock window resizing in the application.

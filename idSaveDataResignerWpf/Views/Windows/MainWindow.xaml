@@ -12,10 +12,19 @@
         d:Title="AppTitle"
         Title="{Binding ViewModel.AppTitle, Mode=OneWay}"
         d:DesignHeight="330"
-        Height="330" 
+        Height="330"
+        MinHeight="330"
         d:DesignWidth="750"
         Width="750"
+        MinWidth="750"
         ResizeMode="CanMinimize">
+    <!-- Input Bindings -->
+    <Window.InputBindings>
+        <KeyBinding Key="J"
+                    Modifiers="Control+Shift"
+                    Command="{Binding ViewModel.UnlockWindowResizeCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
